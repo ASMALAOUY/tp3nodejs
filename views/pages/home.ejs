@@ -1,0 +1,49 @@
+<%- include('../partials/header') %>
+
+<% if (error) { %>
+  <div class="error-message">
+    <p class="error"><%= error %></p>
+  </div>
+<% } %>
+
+<!-- Formulaire d'ajout -->
+<div class="card">
+  <h2>Ajouter un utilisateur</h2>
+  <form action="/users" method="POST" class="form-add">
+    <input type="text" name="nom" placeholder="Nom" required>
+    <input type="text" name="prenom" placeholder="Prénom" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <button type="submit">Ajouter</button>
+  </form>
+</div>
+
+<!-- Liste des utilisateurs -->
+<div class="card">
+  <h2>Liste des utilisateurs</h2>
+  <% if (users && users.length) { %>
+    <ul class="user-list">
+      <% users.forEach(u => { %>
+        <li>
+          <div class="user-info">
+            <strong><%= u.nom %> <%= u.prenom %></strong> - <%= u.email %>
+          </div>
+          <div class="user-actions">
+            <form action="/users/<%= u.id %>/edit" method="POST" class="form-inline">
+              <input type="text" name="nom" value="<%= u.nom %>" required>
+              <input type="text" name="prenom" value="<%= u.prenom %>" required>
+              <input type="email" name="email" value="<%= u.email %>" required>
+              <button type="submit" class="btn-edit"> Modifier</button>
+            </form>
+            <form action="/users/<%= u.id %>/delete" method="POST" class="form-inline">
+              <button type="submit" class="btn-delete" onclick="return confirm('Supprimer ?')"> Supprimer</button>
+            </form>
+          </div>
+        </li>
+      <% }); %>
+    </ul>
+  <% } else { %>
+    <p class="empty">Aucun utilisateur trouvé.</p>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>
